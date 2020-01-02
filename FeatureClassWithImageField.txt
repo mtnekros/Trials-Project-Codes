@@ -1,0 +1,8 @@
+Bussiness_Center
+Education_Infrasturcture
+Financial_Institution
+Health_Amenity
+Obstacle_Natural_Hazard
+Public_Building
+River_Crossing
+Settlement
