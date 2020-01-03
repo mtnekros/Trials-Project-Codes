@@ -32,7 +32,7 @@ if __name__ == "__main__":
             for row in cursor:
                 geometry = row[1]
                 objectid = row[2]
-                if row[0].strip() == "False": # in case it's already determined to not a duplicate no caculations required
+                if row[0].strip() == "False": # in case it's already determined to not be a duplicate no caculations required
                     geomsInFc.append( (geometry,objectid) )
                     continue
                 result = getIDofNearestGeomWithin( geometry,geomsInFc,toleranceRadius )
