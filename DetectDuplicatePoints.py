@@ -7,9 +7,20 @@ def getIDofNearbyGeom( suspect,geomList,tolerance ):
             return {"ID": geom[1],"distance": distance}# return the objectid of geom and distance between the suspect and geom
     return None
 
+def getIDofNearestGeomWithin( suspect,geomList,tolerance ):
+    acceptableDistances = []
+    for geom in iter(geomList):
+        distance = suspect.distanceTo( geom[0] )
+        if distance < tolerance:
+            acceptableDistances.append( {"ID": geom[1],"distance": distance} )# the objectid of geom and distance between the suspect and geom
+    if len(acceptableDistances) == 0:
+        return None
+    return  min(acceptableDistances,key=lambda d: d["distance"])
+
 if __name__ == "__main__":
-    arcpy.env.workspace = r"C:\Users\Diwas\Desktop\Mugu Trails\WorkingGDB\Working.gdb\osmapping\#! Delete this and change later"
-    featureClasses = filter( lambda fc: fc != "Trail", arcpy.ListFeatureClasses() )
+    arcpy.env.workspace = r"C:\Users\Diwas\Desktop\Mugu Trails\WorkingGDB\Working.gdb\osmapping"
+    # featureClasses = filter( lambda fc: fc != "Trail", arcpy.ListFeatureClasses() )
+    featureClasses = ["Natural_Hazard","Obstacles","Settlement"]
     toleranceRadius = 35 # tolerance in meter
 
     for fc in featureClasses:
@@ -24,7 +35,7 @@ if __name__ == "__main__":
                 if row[0].strip() == "False": # in case it's already determined to not a duplicate no caculations required
                     geomsInFc.append( (geometry,objectid) )
                     continue
-                result = getIDofNearbyGeom( geometry,geomsInFc,toleranceRadius )
+                result = getIDofNearestGeomWithin( geometry,geomsInFc,toleranceRadius )
                 if result is None:
                     row[0] = "False"
                 else:
